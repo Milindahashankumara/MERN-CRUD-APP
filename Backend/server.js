@@ -11,7 +11,7 @@ connectToDb();
 
 // Middleware
 app.use(express.json());
-app.use(cors()); // ✅ Fixed: CORS is now properly imported and used
+app.use(cors()); // 
 
 // Routes
 app.post("/notes", notesController.createNote);

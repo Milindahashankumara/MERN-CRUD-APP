@@ -1,5 +1,7 @@
 const Note = require("../models/note");
 
+
+
 const createNote = async (req, res) => {
     // Get the data off the req body
     const abc = req.body.title;
@@ -16,6 +18,8 @@ const createNote = async (req, res) => {
     res.json({ note: note });
 };
 
+
+
 const fetchNotes = async (req, res) => {
     // Find the notes
     const notes = await Note.find();
@@ -23,6 +27,9 @@ const fetchNotes = async (req, res) => {
     // Respond with them
     res.json({ notes: notes });
 };
+
+
+
 
 const fetchNote = async (req, res) => {
     // Get id off the URL
@@ -34,6 +41,8 @@ const fetchNote = async (req, res) => {
     // Respond with the note
     res.json({ note: note });
 };
+
+
 
 const updateNote = async (req, res) => {
     // Get the id off the URL
@@ -58,16 +67,21 @@ const updateNote = async (req, res) => {
     res.json({ note: note });
 };
 
-const deleteNote = async (req, res) => {
-    // Get id off URL
-    const noteId = req.params.id;
 
-    // Delete the record (Fixed the query)
-    await Note.deleteOne({_id: noteId});
 
-    // Respond
-    res.json({ success: "Record deleted" });
+exports.deleteNote = async (req, res) => {
+    console.log("DELETE request received with ID:", req.params.id); // Debug log
+    try {
+        const deletedNote = await Note.findByIdAndDelete(req.params.id);
+        if (!deletedNote) {
+            return res.status(404).json({ message: "Note not found" });
+        }
+        res.json({ message: "Note deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
 };
+
 
 module.exports = {
     fetchNotes,
